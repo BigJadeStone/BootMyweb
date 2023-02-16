@@ -25,20 +25,20 @@
 						<div class="fl">
 							<div>
 								<span class="search_th">상품이름 검색</span>
-								<input type="text" class="" name="searchName" placeholder="상품 검색">
+								<input type="text" class="" name="searchName" th:value="${pageVO.cri.searchName}" placeholder="상품 검색">
 							</div>
 							
 							<div>
 								<span class="search_th">상품내용 검색</span>
-								<input type="text" class="" name="searchContent" placeholder="상품 검색">
+								<input type="text" class="" name="searchContent" th:value="${pageVO.cri.searchContent}" placeholder="상품 검색">
 							</div>
 							
 							<div>
 								<span class="search_th">판매가 정렬</span>
 								<select class="" name="searchPrice">
-									<option value="none">정렬방식</option>
-									<option value="asc">낮은순</option>
-									<option value="desc">높은순</option>
+									<option value="none" th:selected="${pageVO.cri.searchPrice} == 'none'">정렬방식</option>
+									<option value="asc" th:selected="${pageVO.cri.searchPrice} == 'asc'">낮은순</option>
+									<option value="desc" th:selected="${pageVO.cri.searchPrice} == 'desc'">높은순</option>
 								</select>
 							</div>
 
@@ -46,8 +46,8 @@
 							<div class="pdt15"></div>
 							<div>
 								<span class="search_th">판매마감일</span>
-								<input type="text" class="datepicker" name="startDate" readonly placeholder="날짜선택" /> -
-								<input type="text" class="datepicker" name="endDate" readonly placeholder="날짜선택" />
+								<input type="text" class="datepicker" name="startDate" readonly th:value="${pageVO.cri.startDate}" placeholder="날짜선택" /> -
+								<input type="text" class="datepicker" name="endDate" readonly th:value="${pageVO.cri.endDate}" placeholder="날짜선택" />
 							</div>
 							<!-- 
 							<div>
@@ -126,7 +126,7 @@
 										</table>
 
 
-										<div class="page">
+<!-- 										<div class="page">
 											<ul>
 												
 												<li><a th:href="@{productList(page=1, amount=${pageVO.amount} )}"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>
@@ -149,6 +149,65 @@
 												</th:block>
 												
 												<li><a th:href="@{productList(page=${pageVO.realEnd}, amount=${pageVO.amount} )}"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>
+											
+											</ul>
+										</div> -->
+										
+										<div class="page">
+											<ul>
+												
+												<li><a th:href="@{productList(page=1, 
+																			  amount=${pageVO.amount},
+																			  startDate=${pageVO.cri.startDate},
+																			  endDate=${pageVO.cri.endDate},
+																			  searchName=${pageVO.cri.searchName},
+																			  searchContent=${pageVO.cri.searchContent},
+																			  searchPrice=${pageVO.cri.searchPrice} 
+																			  )}"><i class="fa fa-angle-double-left" aria-hidden="true"></i></a></li>
+												
+												<th:block th:if="${pageVO.prev}">
+												<li style="margin-right:5px;">
+													<a th:href="@{productList(page=${pageVO.start - 1}, 
+																  			  amount=${pageVO.amount},
+																			  startDate=${pageVO.cri.startDate},
+																			  endDate=${pageVO.cri.endDate},
+																			  searchName=${pageVO.cri.searchName},
+																			  searchContent=${pageVO.cri.searchContent},
+																			  searchPrice=${pageVO.cri.searchPrice}
+		  																      )}"><i class="fa fa-angle-left" aria-hidden="true"></i></a></li>
+												</th:block>
+												
+												<th:block th:each="page : ${pageVO.pageList}">
+												<li th:class="${page == pageVO.page ? 'on' : ''}">
+													<a th:href="@{productList(page=${page}, 
+																			  amount=${pageVO.amount},
+																			  startDate=${pageVO.cri.startDate},
+																			  endDate=${pageVO.cri.endDate},
+																			  searchName=${pageVO.cri.searchName},
+																			  searchContent=${pageVO.cri.searchContent},
+																			  searchPrice=${pageVO.cri.searchPrice} )}">[[${page}]]</a>
+												</li>
+												</th:block>
+												
+												<th:block th:if="${pageVO.next}">
+												<li style="margin-left:5px;">
+													<a th:href="@{productList(page=${pageVO.end + 1}, 
+															                  amount=${pageVO.amount},
+																			  startDate=${pageVO.cri.startDate},
+																			  endDate=${pageVO.cri.endDate},
+																			  searchName=${pageVO.cri.searchName},
+																			  searchContent=${pageVO.cri.searchContent},
+																			  searchPrice=${pageVO.cri.searchPrice} )}"><i class="fa fa-angle-right" aria-hidden="true"></i></a>
+												</li>
+												</th:block>
+												
+												<li><a th:href="@{productList(page=${pageVO.realEnd}, 
+																  	          amount=${pageVO.amount},
+																			  startDate=${pageVO.cri.startDate},
+																			  endDate=${pageVO.cri.endDate},
+																			  searchName=${pageVO.cri.searchName},
+																			  searchContent=${pageVO.cri.searchContent},
+																			  searchPrice=${pageVO.cri.searchPrice} )}"><i class="fa fa-angle-double-right" aria-hidden="true"></i></a></li>
 											
 											</ul>
 										</div>
@@ -243,7 +302,10 @@
 	var handleAmount = document.getElementById("handleAmount");
 	handleAmount.onchange = function(e) {
 
-		location.href="productList?page=1&amount=" + e.target.value;
+		//location.href="productList?page=1&amount=" + e.target.value;
+		
+		document.actionForm.amount.value = e.target.value;
+		document.actionForm.submit();
 		
 	}
 	

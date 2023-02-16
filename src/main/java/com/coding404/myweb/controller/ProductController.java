@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.coding404.myweb.command.ProductVO;
@@ -37,6 +38,14 @@ public class ProductController {
 					   Model model,
 					   Criteria cri) {
 		
+		/*
+		 * 1. 검색폼 에서는 키워드, page, amount 데이터를 넘깁니다.
+		 * 2. 목록조회 and total 동적쿼리로 변경
+		 * 3. 페이지네이션에 키워드, page, amount 데이터를 넘긴다.
+		 * 4. 검색키워드 화면에서 유지시킴
+		 */
+		
+		
 		//프로세스
 		//admin이라고 가정
 		session.setAttribute("user_id", "admin");
@@ -48,7 +57,7 @@ public class ProductController {
 		model.addAttribute("list", list);
 		
 		//페이지네이션 처리
-		int total = productService.getTotal(user_id);
+		int total = productService.getTotal(user_id, cri);
 		PageVO pageVO = new PageVO(cri, total);
 //		System.out.println(pageVO.getPageList().toString());
 		model.addAttribute("pageVO", pageVO);
@@ -77,6 +86,11 @@ public class ProductController {
 		return "redirect:/product/productList"; //목록으로
 	}
 	
-	
+	@ResponseBody
+	@GetMapping("/xxx")
+	public String xxx() {
+		
+		return "경로";
+	}
 	
 }
