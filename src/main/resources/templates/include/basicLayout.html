@@ -22,7 +22,7 @@
 	
 	<!--개인 -->
 	<link rel="stylesheet" type="text/css" href="/css/modal.css" />
-	<script src="/js/modal.js"></script>
+	
 	
 </head>
 <body>
@@ -41,9 +41,9 @@
         <span class="menuBtn">버튼</span>
         <ul class="sidenav">
             <li class="sub_menu_toggle">
-                <a href="#">- 상품관리(예제)</a>
-                <ul class="sub_menu ">
-                    <li><a th:href="@{/product/productReg}">-상품등록</a></li>
+                <a href="#" >- 상품관리(예제)</a>
+                <ul class="sub_menu " >
+                    <li><a th:href="@{/product/productReg}" >-상품등록</a></li>
                     <li><a th:href="@{/product/productList}">-상품조회 / 수정</a></li>
                     <li><a href="#">-하단메뉴</a></li>
                 </ul>
@@ -126,6 +126,38 @@
 	</footer>	
 
 </body>
+
+<script th:inline="javascript">
+	
+	/*
+	메뉴선택유지 - 
+	sub_menu에 display:block.
+	sub_menu > a링크에 on클래스.
+	sub_menu_toggle > a에 sub_menu_select클래스.
+	*/
+	
+	var menu = JSON.parse('[[${uri}]]'); //postHandler에서 보내주는 uri
+	
+	$(".sub_menu a").each(function(index,item){
+		//console.log(index, item)
+		//console.log($(item))
+		
+		//$("a[href*="'+menu+'"]").addClass
+		
+		if($(item).attr("href").includes(menu)){
+			$(item).addClass("on"); //a태그에 on클래스 추가
+			$(item).closest(".sub_menu").css("display","block");
+			$(item).closest(".sub_menu").prev().addClass("sub_menu_select");
+		}
+	})
+		
+	
+	
+</script>
+
 </th:block>
 
+
+
 </html>
+
